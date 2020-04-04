@@ -1,0 +1,303 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CA860D68-8C76-4665-AB68-E7F8EABA3B08}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>GateServer</RootNamespace>
+    <AssemblyName>GateServer</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\Bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Pipelines.Sockets.Unofficial, Version=1.0.0.0, Culture=neutral, PublicKeyToken=42ea0a778e13fbe2, processorArchitecture=MSIL">
+      <HintPath>..\packages\Pipelines.Sockets.Unofficial.2.0.22\lib\net461\Pipelines.Sockets.Unofficial.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Common, Version=5.0.0.0, Culture=neutral, PublicKeyToken=02c12cbda47e6587, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.Common.5.6.0\lib\net45\ServiceStack.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Interfaces, Version=5.0.0.0, Culture=neutral, PublicKeyToken=02c12cbda47e6587, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.Interfaces.5.6.0\lib\net45\ServiceStack.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Text, Version=5.0.0.0, Culture=neutral, PublicKeyToken=02c12cbda47e6587, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.Text.5.6.0\lib\net45\ServiceStack.Text.dll</HintPath>
+    </Reference>
+    <Reference Include="StackExchange.Redis, Version=2.0.0.0, Culture=neutral, PublicKeyToken=c219ff1ca8c2ce46, processorArchitecture=MSIL">
+      <HintPath>..\packages\StackExchange.Redis.2.0.601\lib\net461\StackExchange.Redis.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.4.0\lib\netstandard2.0\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Diagnostics.PerformanceCounter, Version=4.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.PerformanceCounter.4.5.0\lib\net461\System.Diagnostics.PerformanceCounter.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Pipelines, Version=4.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Pipelines.4.5.1\lib\netstandard2.0\System.IO.Pipelines.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.3\lib\netstandard2.0\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.4.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.2\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Channels, Version=4.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Channels.4.5.0\lib\netstandard2.0\System.Threading.Channels.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.1\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\CommonCode\ConfigModel\AutoConfigDataLoader.cs">
+      <Link>DataModel\Config\AutoConfigDataLoader.cs</Link>
+    </Compile>
+    <Compile Include="..\CommonCode\ConfigModel\ResourcePath.cs">
+      <Link>DataModel\Config\ResourcePath.cs</Link>
+    </Compile>
+    <Compile Include="..\CommonCode\ConfigModel\TableDefine.cs">
+      <Link>DataModel\Config\TableDefine.cs</Link>
+    </Compile>
+    <Compile Include="..\commoncode\config\ConfigDataLoader.cs">
+      <Link>Config\ConfigDataLoader.cs</Link>
+    </Compile>
+    <Compile Include="..\commoncode\config\ConfigManager.cs">
+      <Link>Config\ConfigManager.cs</Link>
+    </Compile>
+    <Compile Include="..\CommonCode\ConstInfo.cs">
+      <Link>ThirdFunc\ConstInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\CommonCode\FileJson.cs">
+      <Link>ThirdFunc\FileJson.cs</Link>
+    </Compile>
+    <Compile Include="..\commoncode\fixedpoint\Fix.cs">
+      <Link>ThirdFunc\FixedPoint\Fix.cs</Link>
+    </Compile>
+    <Compile Include="..\commoncode\fixedpoint\FixConst.cs">
+      <Link>ThirdFunc\FixedPoint\FixConst.cs</Link>
+    </Compile>
+    <Compile Include="..\commoncode\fixedpoint\FixMath.cs">
+      <Link>ThirdFunc\FixedPoint\FixMath.cs</Link>
+    </Compile>
+    <Compile Include="..\commoncode\fixedpoint\FixMathConsts.cs">
+      <Link>ThirdFunc\FixedPoint\FixMathConsts.cs</Link>
+    </Compile>
+    <Compile Include="..\commoncode\fixedpoint\FixTrans2.cs">
+      <Link>ThirdFunc\FixedPoint\FixTrans2.cs</Link>
+    </Compile>
+    <Compile Include="..\commoncode\fixedpoint\FixTrans3.cs">
+      <Link>ThirdFunc\FixedPoint\FixTrans3.cs</Link>
+    </Compile>
+    <Compile Include="..\commoncode\fixedpoint\FixVec2.cs">
+      <Link>ThirdFunc\FixedPoint\FixVec2.cs</Link>
+    </Compile>
+    <Compile Include="..\commoncode\fixedpoint\FixVec3.cs">
+      <Link>ThirdFunc\FixedPoint\FixVec3.cs</Link>
+    </Compile>
+    <Compile Include="..\CommonCode\LitJson\IJsonWrapper.cs">
+      <Link>ThirdFunc\LitJson\IJsonWrapper.cs</Link>
+    </Compile>
+    <Compile Include="..\CommonCode\LitJson\JsonData.cs">
+      <Link>ThirdFunc\LitJson\JsonData.cs</Link>
+    </Compile>
+    <Compile Include="..\CommonCode\LitJson\JsonException.cs">
+      <Link>ThirdFunc\LitJson\JsonException.cs</Link>
+    </Compile>
+    <Compile Include="..\CommonCode\LitJson\JsonMapper.cs">
+      <Link>ThirdFunc\LitJson\JsonMapper.cs</Link>
+    </Compile>
+    <Compile Include="..\CommonCode\LitJson\JsonMockWrapper.cs">
+      <Link>ThirdFunc\LitJson\JsonMockWrapper.cs</Link>
+    </Compile>
+    <Compile Include="..\CommonCode\LitJson\JsonReader.cs">
+      <Link>ThirdFunc\LitJson\JsonReader.cs</Link>
+    </Compile>
+    <Compile Include="..\CommonCode\LitJson\JsonWriter.cs">
+      <Link>ThirdFunc\LitJson\JsonWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\CommonCode\LitJson\Lexer.cs">
+      <Link>ThirdFunc\LitJson\Lexer.cs</Link>
+    </Compile>
+    <Compile Include="..\CommonCode\LitJson\Netstandard15Polyfill.cs">
+      <Link>ThirdFunc\LitJson\Netstandard15Polyfill.cs</Link>
+    </Compile>
+    <Compile Include="..\CommonCode\LitJson\ParserToken.cs">
+      <Link>ThirdFunc\LitJson\ParserToken.cs</Link>
+    </Compile>
+    <Compile Include="..\CommonCode\NetMsg\GC2CS.cs">
+      <Link>DataModel\NetMsg\GC2CS.cs</Link>
+    </Compile>
+    <Compile Include="..\CommonCode\NetMsg\GC2LS.cs">
+      <Link>DataModel\NetMsg\GC2LS.cs</Link>
+    </Compile>
+    <Compile Include="..\CommonCode\NetMsg\GS2CS.cs">
+      <Link>DataModel\NetMsg\GS2CS.cs</Link>
+    </Compile>
+    <Compile Include="..\CommonCode\NetMsg\GS2GC.cs">
+      <Link>DataModel\NetMsg\GS2GC.cs</Link>
+    </Compile>
+    <Compile Include="..\CommonCode\NetMsg\LS2GS.cs">
+      <Link>DataModel\NetMsg\LS2GS.cs</Link>
+    </Compile>
+    <Compile Include="..\CommonCode\NetMsg\NetCommon.cs">
+      <Link>DataModel\NetMsg\NetCommon.cs</Link>
+    </Compile>
+    <Compile Include="..\CommonCode\NetMsg\ProtoMsgIds.cs">
+      <Link>DataModel\NetMsg\ProtoMsgIds.cs</Link>
+    </Compile>
+    <Compile Include="..\CommonCode\NetMsg\ResultCode.cs">
+      <Link>DataModel\NetMsg\ResultCode.cs</Link>
+    </Compile>
+    <Compile Include="..\CommonCode\Net\HeatBeatService.cs">
+      <Link>ThirdFunc\Net\HeatBeatService.cs</Link>
+    </Compile>
+    <Compile Include="..\CommonCode\Net\MsgHandler.cs">
+      <Link>ThirdFunc\Net\MsgHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\CommonCode\Net\NetModule.cs">
+      <Link>ThirdFunc\Net\NetModule.cs</Link>
+    </Compile>
+    <Compile Include="..\CommonCode\Net\NetSession.cs">
+      <Link>ThirdFunc\Net\NetSession.cs</Link>
+    </Compile>
+    <Compile Include="..\CommonCode\Net\NetSessionMgr.cs">
+      <Link>ThirdFunc\Net\NetSessionMgr.cs</Link>
+    </Compile>
+    <Compile Include="..\CommonCode\Net\TcpNetConnect.cs">
+      <Link>ThirdFunc\Net\TcpNetConnect.cs</Link>
+    </Compile>
+    <Compile Include="..\CommonCode\Net\TcpNetListen.cs">
+      <Link>ThirdFunc\Net\TcpNetListen.cs</Link>
+    </Compile>
+    <Compile Include="DataModel\User.cs" />
+    <Compile Include="Network\MsgHandler\GCMsgHandler.cs" />
+    <Compile Include="Network\MsgHandler\SSMsgHandler.cs" />
+    <Compile Include="Network\MsgHandler\LSMsgHandler.cs" />
+    <Compile Include="Network\MsgHandler\CSMsgHandler.cs" />
+    <Compile Include="Network\Session\M2SSSession.cs" />
+    <Compile Include="Network\Session\M2LSSession.cs" />
+    <Compile Include="Network\Session\M2CSSession.cs" />
+    <Compile Include="Network\Session\Client2MSession.cs" />
+    <Compile Include="Google.Protobuf\ByteArray.cs" />
+    <Compile Include="Google.Protobuf\ByteString.cs" />
+    <Compile Include="Google.Protobuf\CodedInputStream.cs" />
+    <Compile Include="Google.Protobuf\CodedOutputStream.ComputeSize.cs" />
+    <Compile Include="Google.Protobuf\CodedOutputStream.cs" />
+    <Compile Include="Google.Protobuf\Collections\MapField.cs" />
+    <Compile Include="Google.Protobuf\Collections\ReadOnlyDictionary.cs" />
+    <Compile Include="Google.Protobuf\Collections\RepeatedField.cs" />
+    <Compile Include="Google.Protobuf\Compatibility\PropertyInfoExtensions.cs" />
+    <Compile Include="Google.Protobuf\Compatibility\StreamExtensions.cs" />
+    <Compile Include="Google.Protobuf\FieldCodec.cs" />
+    <Compile Include="Google.Protobuf\FrameworkPortability.cs" />
+    <Compile Include="Google.Protobuf\ICustomDiagnosticMessage.cs" />
+    <Compile Include="Google.Protobuf\IDeepCloneable.cs" />
+    <Compile Include="Google.Protobuf\IMessage.cs" />
+    <Compile Include="Google.Protobuf\InvalidJsonException.cs" />
+    <Compile Include="Google.Protobuf\InvalidProtocolBufferException.cs" />
+    <Compile Include="Google.Protobuf\JsonFormatter.cs" />
+    <Compile Include="Google.Protobuf\JsonParser.cs" />
+    <Compile Include="Google.Protobuf\JsonToken.cs" />
+    <Compile Include="Google.Protobuf\JsonTokenizer.cs" />
+    <Compile Include="Google.Protobuf\LimitedInputStream.cs" />
+    <Compile Include="Google.Protobuf\MessageExtensions.cs" />
+    <Compile Include="Google.Protobuf\MessageParser.cs" />
+    <Compile Include="Google.Protobuf\Properties\AssemblyInfo.cs" />
+    <Compile Include="Google.Protobuf\ProtoPreconditions.cs" />
+    <Compile Include="Google.Protobuf\Reflection\CustomOptions.cs" />
+    <Compile Include="Google.Protobuf\Reflection\Descriptor.cs" />
+    <Compile Include="Google.Protobuf\Reflection\DescriptorBase.cs" />
+    <Compile Include="Google.Protobuf\Reflection\DescriptorPool.cs" />
+    <Compile Include="Google.Protobuf\Reflection\DescriptorUtil.cs" />
+    <Compile Include="Google.Protobuf\Reflection\DescriptorValidationException.cs" />
+    <Compile Include="Google.Protobuf\Reflection\EnumDescriptor.cs" />
+    <Compile Include="Google.Protobuf\Reflection\EnumValueDescriptor.cs" />
+    <Compile Include="Google.Protobuf\Reflection\FieldAccessorBase.cs" />
+    <Compile Include="Google.Protobuf\Reflection\FieldDescriptor.cs" />
+    <Compile Include="Google.Protobuf\Reflection\FieldType.cs" />
+    <Compile Include="Google.Protobuf\Reflection\FileDescriptor.cs" />
+    <Compile Include="Google.Protobuf\Reflection\GeneratedClrTypeInfo.cs" />
+    <Compile Include="Google.Protobuf\Reflection\IDescriptor.cs" />
+    <Compile Include="Google.Protobuf\Reflection\IFieldAccessor.cs" />
+    <Compile Include="Google.Protobuf\Reflection\MapFieldAccessor.cs" />
+    <Compile Include="Google.Protobuf\Reflection\MessageDescriptor.cs" />
+    <Compile Include="Google.Protobuf\Reflection\MethodDescriptor.cs" />
+    <Compile Include="Google.Protobuf\Reflection\OneofAccessor.cs" />
+    <Compile Include="Google.Protobuf\Reflection\OneofDescriptor.cs" />
+    <Compile Include="Google.Protobuf\Reflection\OriginalNameAttribute.cs" />
+    <Compile Include="Google.Protobuf\Reflection\PackageDescriptor.cs" />
+    <Compile Include="Google.Protobuf\Reflection\PartialClasses.cs" />
+    <Compile Include="Google.Protobuf\Reflection\ReflectionUtil.cs" />
+    <Compile Include="Google.Protobuf\Reflection\RepeatedFieldAccessor.cs" />
+    <Compile Include="Google.Protobuf\Reflection\ServiceDescriptor.cs" />
+    <Compile Include="Google.Protobuf\Reflection\SingleFieldAccessor.cs" />
+    <Compile Include="Google.Protobuf\Reflection\TypeRegistry.cs" />
+    <Compile Include="Google.Protobuf\WellKnownTypes\Any.cs" />
+    <Compile Include="Google.Protobuf\WellKnownTypes\AnyPartial.cs" />
+    <Compile Include="Google.Protobuf\WellKnownTypes\Api.cs" />
+    <Compile Include="Google.Protobuf\WellKnownTypes\Duration.cs" />
+    <Compile Include="Google.Protobuf\WellKnownTypes\DurationPartial.cs" />
+    <Compile Include="Google.Protobuf\WellKnownTypes\Empty.cs" />
+    <Compile Include="Google.Protobuf\WellKnownTypes\FieldMask.cs" />
+    <Compile Include="Google.Protobuf\WellKnownTypes\FieldMaskPartial.cs" />
+    <Compile Include="Google.Protobuf\WellKnownTypes\SourceContext.cs" />
+    <Compile Include="Google.Protobuf\WellKnownTypes\Struct.cs" />
+    <Compile Include="Google.Protobuf\WellKnownTypes\TimeExtensions.cs" />
+    <Compile Include="Google.Protobuf\WellKnownTypes\Timestamp.cs" />
+    <Compile Include="Google.Protobuf\WellKnownTypes\TimestampPartial.cs" />
+    <Compile Include="Google.Protobuf\WellKnownTypes\Type.cs" />
+    <Compile Include="Google.Protobuf\WellKnownTypes\ValuePartial.cs" />
+    <Compile Include="Google.Protobuf\WellKnownTypes\Wrappers.cs" />
+    <Compile Include="Google.Protobuf\WellKnownTypes\WrappersPartial.cs" />
+    <Compile Include="Google.Protobuf\WireFormat.cs" />
+    <Compile Include="Network\Session\GSSessionMgr.cs" />
+    <Compile Include="Network\GSServer.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ThirdFunc\Utility\EncryptionTool.cs" />
+    <Compile Include="ThirdFunc\Utility\TimeTool.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
