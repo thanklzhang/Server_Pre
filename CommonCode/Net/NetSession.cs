@@ -84,7 +84,7 @@ public class NetSession //: ITcpClient
 
     public void OnReceive(int msgHeader, byte[] body)
     {
-        new Task(()=>
+        new Task(() =>
         {
             //if (msgHeader == ConstInfo.sendHeartBeatMsgId)
             //{
@@ -109,13 +109,17 @@ public class NetSession //: ITcpClient
             //}
 
             //暂时不处理心跳
-            handleMsgAction?.Invoke(msgHeader, body);
-
+            try
+            {
+                handleMsgAction?.Invoke(msgHeader, body);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+            }
+            
         }).Start();
-
-     
-
-
+        
     }
 
     public void SetHandlerAction(Action<int, byte[]> action)

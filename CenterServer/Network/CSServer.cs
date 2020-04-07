@@ -15,14 +15,14 @@ public class CSServer
     public static CSServer Instance;
     CSSessionMgr gsSessionMgr;
 
-    public UserMgr userMgr;
+    public OnlineUserMgr userMgr;
    // public PlayerMgr playerMgr;
 
    // public MateManager mateManager;
     public CSServer()
     {
         Instance = this;
-        userMgr = new UserMgr();
+        userMgr = new OnlineUserMgr();
         //playerMgr = new PlayerMgr();
     }
     public void Start()
@@ -46,12 +46,12 @@ public class CSServer
 
     }
 
-    public User GetUser(string account)
+    public OnlineUser GetUser(string account)
     {
         return userMgr.GetUser(account);
     }
 
-    public void UserOnline(User user)
+    public void UserOnline(OnlineUser user)
     {
         userMgr.UserOnline(user);
         //playerMgr.Create(user);

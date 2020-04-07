@@ -47,4 +47,3 @@ E:\KalGame\JekoAllServer\CenterServer\obj\Debug\CenterServer.csproj.CoreCompileI
 E:\KalGame\JekoAllServer\CenterServer\obj\Debug\CenterServer.csproj.CopyComplete
 E:\KalGame\JekoAllServer\CenterServer\obj\Debug\CenterServer.exe
 E:\KalGame\JekoAllServer\CenterServer\obj\Debug\CenterServer.pdb
-E:\KalGame\JekoAllServer\CenterServer\obj\Debug\CenterServer.csprojAssemblyReference.cache

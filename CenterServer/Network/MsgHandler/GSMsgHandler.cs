@@ -13,6 +13,7 @@ public class GSMsgHandler //: MsgHandler
 
     public void HandleMsg(int gcNetId, int msgId, byte[] data)
     {
+
         //非转发消息
         if (msgId > (int)GS2CS.MsgId.Begin && msgId < (int)GS2CS.MsgId.End)
         {
@@ -36,59 +37,60 @@ public class GSMsgHandler //: MsgHandler
             switch ((GC2LS.MsgId)msgId)
             {
                 case GC2LS.MsgId.Gc2LsAskLogin:
+
                     GC2LS.reqAskLogin askLogin = GC2LS.reqAskLogin.Parser.ParseFrom(data);
                     string account = askLogin.Account;
                     string password = askLogin.Password;
 
                     bool isLoginSuccess = false;
-                    User user = null;
-                    //var user = UserDBOp.CheckUser(account);//, password
+                    UserData user = DBMgr.userDataMgr.Find(null, "account = '" + account + "'");//, password
 
 
 
+                    //List<int> lo = null;
+                    //lo.Add(1);
+                    if (user != null)
+                    {
+                        //Console.WriteLine("have uer , server login info : " + user + " " + user.account + " " + user.password);
+                        if (password == user.password)
+                        {
+                            isLoginSuccess = true;
+                        }
+                        Console.WriteLine("have user , check password : " + isLoginSuccess);
+                    }
+                    else
+                    {
+                        //Console.WriteLine("server login info : " + " fail");
 
-                    //if (user != null)
-                    //{
-                    //    Console.WriteLine("server login info : " + user + " " + user.account + " " + user.password);
-                    //    if (password == user.password)
-                    //    {
-                    //        isLoginSuccess = true;
-                    //    }
-                    //    Console.WriteLine("check password : " + password == user.password);
-                    //}
-                    //else
-                    //{
-                    //    //Console.WriteLine("server login info : " + " fail");
+                        //目前没有的用户先给创建一个
+                        Console.WriteLine("no user , create a new user ");
+                        //var id = User.GetMaxId();
+                        //计算 token
+                        Random r = new Random();
+                        string tokenStr = account + TimeTool.GetTimeStamp() + r.Next(100000);
+                        string token = EncryptionTool.GetMd5Str(tokenStr);
+                        user = UserDataMgr<UserData>.CreateUser(account, password, token);
 
-                    //    //目前没有的用户先给创建一个
-                    //    Console.WriteLine("new user");
-                    //    var id = User.GetMaxId();
+                        DBMgr.userDataMgr.Save(user, true);
+                        var userTemp = DBMgr.userDataMgr.Find(new string[] { "id" }, "account = '" + account + "'");//, password
+                        user.id = userTemp.id;
 
-                    //    user = User.Create(id, account);
-                    //    user.password = password;
-                    //    //计算 token
-                    //    Random r = new Random();
-                    //    string tokenStr = user.id + user.account + TimeTool.GetTimeStamp() + r.Next(100000);
-                    //    string token = EncryptionTool.GetMd5Str(tokenStr);
-                    //    user.token = token;
+                        //DBMgr.redisOrg.HashSet("accountId", account, id);
+                        isLoginSuccess = true;
 
 
-                    //    DBMgr.redisOrg.HashSet("accountId", account, id);
-                    //    isLoginSuccess = true;
-
-
-                    //}
+                    }
 
                     //test
-                    user = new User()
-                    {
-                        id = 1,
-                        account = "test0",
-                        password = "123",
-                        token = "123456"
-                    };//, password
+                    //user = new User()
+                    //{
+                    //    id = 1,
+                    //    account = "test0",
+                    //    password = "123",
+                    //    token = "123456"
+                    //};//, password
 
-                    isLoginSuccess = true;
+                    //isLoginSuccess = true;
 
                     GC2LS.respAskLogin loginResult = new GC2LS.respAskLogin();
                     loginResult.IsSuccess = isLoginSuccess;
@@ -104,21 +106,23 @@ public class GSMsgHandler //: MsgHandler
 
                         //this.currSessionId = user.sessionId;
 
-                        ////计算 token
-                        //Random r = new Random();
+                        //计算 token
+                        //Random r = new Random();//之后是一个
                         //string tokenStr = user.id + user.account + TimeTool.GetTimeStamp() + r.Next(100000);
                         //string token = EncryptionTool.GetMd5Str(tokenStr);
-                        loginResult.Token = "" + user.token;
+                        //loginResult.Token = "" + user.token;
                         //user.token = token;
 
 
-                        Console.WriteLine("token : " + user.token);
+
+                        // Console.WriteLine("token : " + user.token);
                         Console.WriteLine("user online : " + user.account);
 
                         //用户成功登录
-                        CSServer.Instance.UserOnline(user);
+                        OnlineUser onlineUser = OnlineUser.Create(user.id, user.account, user.password, user.token);
+                        CSServer.Instance.UserOnline(onlineUser);
                         //CSServer.Instance.playerMgr.Create(user);
-                        Console.WriteLine("when verify netId : " + gcNetId);
+                        //Console.WriteLine("when verify netId : " + gcNetId);
                         //user.SetSessionId(gcNetId);//这个是 登录中 的sessionId 所以不能用 currSessionId
 
                         //currPlayer = CSServer.Instance.GetPlayer(account);
@@ -126,7 +130,11 @@ public class GSMsgHandler //: MsgHandler
 
                         //同步到数据库
                         //DBMgr.redis.Set("user:" + user.id, user);
-                        user.Save();
+
+
+
+
+                        //user.Save();
 
 
                     }
@@ -189,6 +197,7 @@ public class GSMsgHandler //: MsgHandler
 
         GC2CS.respEnterGameService enterResult = new GC2CS.respEnterGameService();
         enterResult.IsSuccess = true;
+        enterResult.Err = ResultCode.Success;
         //this.currSessionId = gcNetId;
         //enterResult.UserInfo = new GS2GC.UserInfo()
         //{

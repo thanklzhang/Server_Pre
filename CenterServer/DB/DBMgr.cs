@@ -25,6 +25,7 @@ public class DBMgr
 
         //userData
         userDataMgr = CreateDataMgr<UserData, UserDataMgr<UserData>>();
+
         //userDataMgr = CreateDataMgr<UserData, UserDataMgr<UserData>>();
 
         Thread t = new Thread(() =>
@@ -33,7 +34,7 @@ public class DBMgr
             hb.Start(() =>
             {
                 SaveAll();
-            }, 6);
+            }, 15);
         });
         t.Start();
     }

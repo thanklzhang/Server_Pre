@@ -12,34 +12,35 @@ namespace CenterServer
     {
         static void Main(string[] args)
         {
-            DBMgr.Init();
+            //DBMgr.Init();
 
-            UserData user = new UserData()
-            {
-                id = 1,
-                account = "zhang0",
-                password = "425",
+            //UserData user = new UserData()
+            //{
+            //    id = 1,
+            //    account = "zhang0",
+            //    password = "425",
 
-            };
+            //};
 
-            var user2 = new UserData()
-            {
-                id = 21,
-                account = "zhang0",
-                password = "425",
+            //var user2 = new UserData()
+            //{
+            //    id = 21,
+            //    account = "zhang0",
+            //    password = "425",
 
-            };
+            //};
 
-            DBMgr.userDataMgr.Save(user, true);
-            DBMgr.userDataMgr.Save(user2, true);
+            //DBMgr.userDataMgr.Save(user, true);
+            //DBMgr.userDataMgr.Save(user2, true);
 
-            user.password = "update0";
-            user.account = "update0";
+            //user.password = "update0";
+            //user.account = "update0";
             
-            DBMgr.userDataMgr.NotifyChangeFields(user, new string[] { "password", "account" });
-            Console.Read();
+            //DBMgr.userDataMgr.NotifyChangeFields(user, new string[] { "password", "account" });
+            //Console.Read();
             
-            return;
+            //return;
+            
             DBMgr.Init();
 
             CSServer centerServer = new CSServer();
@@ -49,7 +50,7 @@ namespace CenterServer
             {
                 Thread.Sleep(1);
             }
-
+          
         }
     }
 

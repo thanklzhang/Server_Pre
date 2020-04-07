@@ -9,6 +9,11 @@ public class DBEntityMgr<T> where T : DBEntity, new()
 {
     ISqlOperator<T> operation;
 
+    public T Find(string[] fieldNames, string param)
+    {
+        return operation.Find(fieldNames, param);
+    }
+
     public List<T> FindAll(string[] fieldNames, string param)
     {
         return operation.FindAll(fieldNames, param);

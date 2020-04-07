@@ -48,4 +48,3 @@ E:\KalGame\JekoAllServer\GateServer\obj\Debug\GateServer.csproj.CoreCompileInput
 E:\KalGame\JekoAllServer\GateServer\obj\Debug\GateServer.csproj.CopyComplete
 E:\KalGame\JekoAllServer\GateServer\obj\Debug\GateServer.exe
 E:\KalGame\JekoAllServer\GateServer\obj\Debug\GateServer.pdb
-E:\KalGame\JekoAllServer\GateServer\obj\Debug\GateServer.csprojAssemblyReference.cache

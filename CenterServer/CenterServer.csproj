@@ -233,7 +233,7 @@
     <Compile Include="CommonFunc\SqlBuilder.cs" />
     <Compile Include="DataModel\Hero.cs" />
     <Compile Include="DataModel\Player.cs" />
-    <Compile Include="DataModel\User.cs" />
+    <Compile Include="DataModel\OnlineUser.cs" />
     <Compile Include="DB\Base\DBEntityFieldMeta.cs" />
     <Compile Include="DB\DBMgr.cs" />
     <Compile Include="DB\Base\ISqlOperator.cs" />
@@ -333,7 +333,7 @@
     <Compile Include="ThirdFunc\Utility\EncryptionTool.cs" />
     <Compile Include="ThirdFunc\Utility\TimeTool.cs" />
     <Compile Include="PlayerMgr.cs" />
-    <Compile Include="UserMgr.cs" />
+    <Compile Include="OnlineUserMgr.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

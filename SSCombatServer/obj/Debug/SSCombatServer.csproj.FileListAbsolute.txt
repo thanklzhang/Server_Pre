@@ -33,4 +33,3 @@ E:\Kal.GameFrame\JekoAllServer\SSCombatServer\obj\Debug\SSCombatServer.csproj.Co
 E:\Kal.GameFrame\JekoAllServer\SSCombatServer\obj\Debug\SSCombatServer.exe
 E:\Kal.GameFrame\JekoAllServer\SSCombatServer\obj\Debug\SSCombatServer.pdb
 E:\KalGame\JekoAllServer\SSCombatServer\obj\Debug\SSCombatServer.csproj.CoreCompileInputs.cache
-E:\KalGame\JekoAllServer\SSCombatServer\obj\Debug\SSCombatServer.csprojAssemblyReference.cache

@@ -133,12 +133,21 @@ public class MysqlOperator<T> : ISqlOperator<T> where T : DBEntity, new()
             {
                 var currField = fieldList[i];
                 var typeStr = CommonFunc.GetFieldSqlType(currField.field);
-                createTableSql += currField.field.Name + " " + typeStr + " ,";
 
-                //需要判断是否是主键
+                if (currField.isIgnoreSerialize)
+                {
+                    continue;
+                }
+
+                //需要判断是否是主键  目前默认主键都是递增的
                 if (currField.isPrimaryKey)
                 {
                     primaryKeyStrs.Add(currField.field.Name);
+                    createTableSql += currField.field.Name + " " + typeStr + " AUTO_INCREMENT ,";
+                }
+                else
+                {
+                    createTableSql += currField.field.Name + " " + typeStr + " ,";
                 }
             }
 
@@ -177,13 +186,15 @@ public class MysqlOperator<T> : ISqlOperator<T> where T : DBEntity, new()
 
     public List<T> FindAll(string[] fieldNames, string param)
     {
+      
         string fields = "";
-        if (fieldNames != null && fieldNames.Length > 0)
+        if (null == fieldNames || 0 == fieldNames.Length)
         {
             fields = "*";
         }
         else
         {
+          
             for (int i = 0; i < fieldNames.Length; i++)
             {
                 var currField = fieldNames[i];
@@ -191,10 +202,13 @@ public class MysqlOperator<T> : ISqlOperator<T> where T : DBEntity, new()
             }
 
             fields = fields.Substring(0, fields.Length - 1);
+            
         }
-
+      
         string tableName = this.tableName;
 
+        //List<int> lo = null;
+        //lo.Add(1);
 
         string sql = string.Format("select {0} from {1} where {2};", fields, tableName, param);
 
@@ -206,6 +220,7 @@ public class MysqlOperator<T> : ISqlOperator<T> where T : DBEntity, new()
         var rows = table.Rows;
         var cols = table.Columns;
         List<T> dataList = new List<T>();
+       
         foreach (DataRow item in rows)
         {
             T data = new T();
@@ -216,25 +231,28 @@ public class MysqlOperator<T> : ISqlOperator<T> where T : DBEntity, new()
                 //find by reflect
                 //item.Field<int>(col.ColumnName);
                 var classField = meta.GetField(col.ColumnName);
+              
                 if (classField != null)
                 {
                     var type = classField.field.FieldType;
-                    Console.WriteLine("type : " + type.ToString());
-                    if (type == typeof(int))
+                   
+                    if (type == TypeHelper.intType)
                     {
                         var value = item.Field<int>(col.ColumnName);
                         classField.field.SetValue(data, value);
                     }
 
-                    if (type == typeof(string))
+                    if (type == TypeHelper.stringType)
                     {
                         var value = item.Field<string>(col.ColumnName);
                         classField.field.SetValue(data, value);
                     }
+                 
                 }
             }
             dataList.Add(data);
         }
+      
         return dataList;
     }
 
@@ -270,6 +288,7 @@ public class MysqlOperator<T> : ISqlOperator<T> where T : DBEntity, new()
     {
         string sql = "INSERT INTO " + this.tableName + " ( ";
         var fields = this.meta.GetFields();
+        
         for (int i = 0; i < fields.Count; i++)
         {
             var currField = fields[i];
@@ -277,6 +296,13 @@ public class MysqlOperator<T> : ISqlOperator<T> where T : DBEntity, new()
             {
                 continue;
             }
+
+            if ("id" == currField.field.Name)
+            {
+                continue;
+            }
+
+
             sql += currField.field.Name + ",";
         }
 
@@ -286,6 +312,10 @@ public class MysqlOperator<T> : ISqlOperator<T> where T : DBEntity, new()
         {
             var currField = fields[i];
             if (currField.isIgnoreSerialize)
+            {
+                continue;
+            }
+            if ("id" == currField.field.Name)
             {
                 continue;
             }
@@ -377,11 +407,14 @@ public class MysqlOperator<T> : ISqlOperator<T> where T : DBEntity, new()
 
     public void AutoSave()
     {
+        //这里之后会变成批量处理
+
         Console.WriteLine("start auto save ... ");
         //new
         for (int i = 0; i < newObjList.Count; ++i)
         {
             var newObj = newObjList[i];
+            InsertImmediate(newObj);
         }
         newObjList.Clear();
 

@@ -18,5 +18,5 @@ E:\Kal.GameFrame\JekoAllServer\TerminalClient\bin\Debug\TerminalClient.pdb
 E:\Kal.GameFrame\JekoAllServer\TerminalClient\obj\Debug\TerminalClient.csproj.CoreCompileInputs.cache
 E:\Kal.GameFrame\JekoAllServer\TerminalClient\obj\Debug\TerminalClient.exe
 E:\Kal.GameFrame\JekoAllServer\TerminalClient\obj\Debug\TerminalClient.pdb
-E:\KalGame\JekoAllServer\TerminalClient\obj\Debug\TerminalClient.csprojAssemblyReference.cache
 E:\KalGame\JekoAllServer\TerminalClient\obj\Debug\TerminalClient.csproj.CoreCompileInputs.cache
+E:\KalGame\JekoAllServer\TerminalClient\obj\Debug\TerminalClient.csprojAssemblyReference.cache
