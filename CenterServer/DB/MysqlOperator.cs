@@ -139,7 +139,7 @@ public class MysqlOperator<T> : ISqlOperator<T> where T : DBEntity, new()
                     continue;
                 }
 
-                //需要判断是否是主键  目前默认主键都是递增的
+                //需要判断是否是主键
                 if (currField.isPrimaryKey)
                 {
                     primaryKeyStrs.Add(currField.field.Name);
