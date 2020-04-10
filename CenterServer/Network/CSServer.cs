@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 //using CenterServer.Mate;
 using DataModel;
 using Google.Protobuf;
+using Logic;
 //using SS2CS;
 
 public class CSServer
@@ -15,26 +16,30 @@ public class CSServer
     public static CSServer Instance;
     CSSessionMgr gsSessionMgr;
 
-    public OnlineUserMgr userMgr;
-   // public PlayerMgr playerMgr;
+    //public UserMgr userMgr;
+    //public HeroMgr heroMgr;
+    // public PlayerMgr playerMgr;
 
-   // public MateManager mateManager;
+    // public MateManager mateManager;
     public CSServer()
     {
         Instance = this;
-        userMgr = new OnlineUserMgr();
+        //userMgr = new UserMgr();
+        //heroMgr = new HeroMgr();
         //playerMgr = new PlayerMgr();
     }
     public void Start()
     {
-        //Config.ConfigManager.Instance.LoadConfig();
+        Config.ConfigManager.Instance.LoadConfig();
 
 
         //Startup(2346);
 
         //匹配管理初始化
         //mateManager = new MateManager();
-       // mateManager.Init();
+        // mateManager.Init();
+
+        HandlerLogicMgr.Instance.Init();
 
         //session
         gsSessionMgr = new CSSessionMgr();
@@ -46,43 +51,43 @@ public class CSServer
 
     }
 
-    public OnlineUser GetUser(string account)
-    {
-        return userMgr.GetUser(account);
-    }
+    //public User GetUser(string account)
+    //{
+    //    return userMgr.GetUser(account);
+    //}
 
-    public void UserOnline(OnlineUser user)
-    {
-        userMgr.UserOnline(user);
-        //playerMgr.Create(user);
-    }
+    //public void UserOnline(User user)
+    //{
+    //    userMgr.UserOnline(user);
+    //    //playerMgr.Create(user);
+    //}
 
     //public Player GetPlayer(string account)
     //{
     //    return playerMgr.GetPlayer(account);
     //}
 
-    internal void UserExit(string account)
-    {
-        //var player = GetPlayer(account);
+    //internal void UserExit(string account)
+    //{
+    //    //var player = GetPlayer(account);
         
 
-        ////如果在战斗中 需要处理退出战斗
-        //if (player != null)
-        //{
-        //    if (mateManager.IsPlayerInCombat(player))
-        //    {
-        //        mateManager.UserExitCombat(GetPlayer(account));
-        //    }
-        //}
-        //else
-        //{
-        //    Console.WriteLine("the player is not found : " + account);
-        //}
+    //    ////如果在战斗中 需要处理退出战斗
+    //    //if (player != null)
+    //    //{
+    //    //    if (mateManager.IsPlayerInCombat(player))
+    //    //    {
+    //    //        mateManager.UserExitCombat(GetPlayer(account));
+    //    //    }
+    //    //}
+    //    //else
+    //    //{
+    //    //    Console.WriteLine("the player is not found : " + account);
+    //    //}
 
-        userMgr.UserExit(account);
-        //playerMgr.RemovePlayer(account);
-    }
+    //    userMgr.UserExit(account);
+    //    //playerMgr.RemovePlayer(account);
+    //}
 
     internal void TransToGS(int infoId, int gcNsId, int msgId, byte[] data)
     {

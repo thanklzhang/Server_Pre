@@ -111,6 +111,9 @@
     <Compile Include="..\CommonCode\ConfigModel\AutoConfigDataLoader.cs">
       <Link>DataModel\Config\AutoConfigDataLoader.cs</Link>
     </Compile>
+    <Compile Include="..\CommonCode\ConfigModel\HeroInfo.cs">
+      <Link>DataModel\Config\HeroInfo.cs</Link>
+    </Compile>
     <Compile Include="..\CommonCode\ConfigModel\ResourcePath.cs">
       <Link>DataModel\Config\ResourcePath.cs</Link>
     </Compile>
@@ -231,9 +234,18 @@
     <Compile Include="Common.cs" />
     <Compile Include="CommonFunc\CommonFunc.cs" />
     <Compile Include="CommonFunc\SqlBuilder.cs" />
-    <Compile Include="DataModel\Hero.cs" />
-    <Compile Include="DataModel\Player.cs" />
-    <Compile Include="DataModel\OnlineUser.cs" />
+    <Compile Include="Logic\User\UserRegistHandleLogic.cs" />
+    <Compile Include="Logic\Hero\HeroRegistHandleLogic.cs" />
+    <Compile Include="Logic\User\Handler\EnterGameServiceHandler.cs" />
+    <Compile Include="Logic\Hero\Handler\NotifyUpdateHeroesHandler.cs" />
+    <Compile Include="Logic\Hero\Handler\AddHeroLevelHandler.cs" />
+    <Compile Include="Logic\Hero\Handler\HeroListHandler.cs" />
+    <Compile Include="Logic\BaseHandler.cs" />
+    <Compile Include="Logic\HandlerLogicMgr.cs" />
+    <Compile Include="Logic\Hero\Hero.cs" />
+    <Compile Include="Logic\User\User.cs" />
+    <Compile Include="Data\DBEntityMgr\HeroDataMgr.cs" />
+    <Compile Include="Data\DBEntity\HeroData.cs" />
     <Compile Include="DB\Base\DBEntityFieldMeta.cs" />
     <Compile Include="DB\DBMgr.cs" />
     <Compile Include="DB\Base\ISqlOperator.cs" />
@@ -328,12 +340,12 @@
     <Compile Include="Network\MsgHandler\GSMsgHandler.cs" />
     <Compile Include="Network\Session\CSSessionMgr.cs" />
     <Compile Include="Network\Session\GS2MSession.cs" />
+    <Compile Include="Logic\User\UserMgr.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ThirdFunc\Utility\EncryptionTool.cs" />
     <Compile Include="ThirdFunc\Utility\TimeTool.cs" />
-    <Compile Include="PlayerMgr.cs" />
-    <Compile Include="OnlineUserMgr.cs" />
+    <Compile Include="Logic\Hero\HeroMgr.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

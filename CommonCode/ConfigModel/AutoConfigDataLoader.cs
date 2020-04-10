@@ -43,6 +43,14 @@ public class AutoConfigDataLoader
 
     
     /// <summary>
+    /// LoadHeroInfo
+    /// </summary>
+    public void LoadHeroInfo(string json)
+    {
+        var list = JsonMapper.ToObject<List<HeroInfo>>(json);
+        configDic.Add(typeof(HeroInfo).Name, list);
+    }
+    /// <summary>
     /// LoadResourcePath
     /// </summary>
     public void LoadResourcePath(string json)

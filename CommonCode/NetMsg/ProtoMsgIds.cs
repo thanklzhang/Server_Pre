@@ -4,6 +4,8 @@ public enum ProtoMsgIds
 	//GC2CS
 	GC2CS_EnterGameService = 13001,//登录成功后 需要请求进入真正的游戏服务 也就是通过 发送到 GS 转发到 CS 验证后即可进入真正的游戏服务
 	GC2CS_HeroList = 13002,
+	GC2CS_AddHeroLevel = 13003,
+	GC2CS_NotifyUpdateHeroes = 13004,
 	//GC2CS_StartMateCombat = 13500,
 
 	//GC2LS

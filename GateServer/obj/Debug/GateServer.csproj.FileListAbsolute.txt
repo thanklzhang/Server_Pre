@@ -40,11 +40,12 @@ E:\Kal.GameFrame\JekoAllServer\GateServer\obj\Debug\GateServer.csproj.CoreCompil
 E:\Kal.GameFrame\JekoAllServer\GateServer\obj\Debug\GateServer.csproj.CopyComplete
 E:\Kal.GameFrame\JekoAllServer\GateServer\obj\Debug\GateServer.exe
 E:\Kal.GameFrame\JekoAllServer\GateServer\obj\Debug\GateServer.pdb
-E:\KalGame\JekoAllServer\Bin\Debug\GateServer.exe.config
 E:\KalGame\JekoAllServer\Bin\Debug\GateServer.exe
+E:\KalGame\JekoAllServer\Bin\Debug\GateServer.exe.config
 E:\KalGame\JekoAllServer\Bin\Debug\GateServer.pdb
 E:\KalGame\JekoAllServer\GateServer\obj\Debug\GateServer.exe.config
 E:\KalGame\JekoAllServer\GateServer\obj\Debug\GateServer.csproj.CoreCompileInputs.cache
 E:\KalGame\JekoAllServer\GateServer\obj\Debug\GateServer.csproj.CopyComplete
 E:\KalGame\JekoAllServer\GateServer\obj\Debug\GateServer.exe
 E:\KalGame\JekoAllServer\GateServer\obj\Debug\GateServer.pdb
+E:\KalGame\JekoAllServer\GateServer\obj\Debug\GateServer.csprojAssemblyReference.cache

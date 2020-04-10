@@ -143,7 +143,7 @@ public class MysqlOperator<T> : ISqlOperator<T> where T : DBEntity, new()
                 if (currField.isPrimaryKey)
                 {
                     primaryKeyStrs.Add(currField.field.Name);
-                    createTableSql += currField.field.Name + " " + typeStr + " AUTO_INCREMENT ,";
+                    createTableSql += currField.field.Name + " " + typeStr + " ,";// AUTO_INCREMENT
                 }
                 else
                 {
@@ -297,10 +297,10 @@ public class MysqlOperator<T> : ISqlOperator<T> where T : DBEntity, new()
                 continue;
             }
 
-            if ("id" == currField.field.Name)
-            {
-                continue;
-            }
+            //if ("id" == currField.field.Name)
+            //{
+            //    continue;
+            //}
 
 
             sql += currField.field.Name + ",";
@@ -315,10 +315,10 @@ public class MysqlOperator<T> : ISqlOperator<T> where T : DBEntity, new()
             {
                 continue;
             }
-            if ("id" == currField.field.Name)
-            {
-                continue;
-            }
+            //if ("id" == currField.field.Name)
+            //{
+            //    continue;
+            //}
 
             var value = currField.field.GetValue(obj);
             string valueStr = "";
@@ -399,7 +399,10 @@ public class MysqlOperator<T> : ISqlOperator<T> where T : DBEntity, new()
 
     public void NotifyChangeFields(T changeObj, string[] fieldNames)
     {
-        changeObjList.Add(changeObj);
+        if (!changeObjList.Contains(changeObj))
+        {
+            changeObjList.Add(changeObj);
+        }
         changeObj.NotifyChangeFields(fieldNames);
     }
 

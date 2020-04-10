@@ -17,7 +17,19 @@ public class DBEntity
     
     public void NotifyChangeFields(string[] fieldNames)
     {
-        willChangeFieldNames.AddRange(fieldNames);
+        for (int i = 0; i < fieldNames.Length;++i)
+        {
+            var fieldName = fieldNames[i];
+            //if (!willChangeFieldNames.Exists(f => f == fieldName))
+            //{
+            //    willChangeFieldNames.Add(fieldName);
+            //}
+            if (!willChangeFieldNames.Contains(fieldName))
+            {
+                willChangeFieldNames.Add(fieldName);
+            }
+        }
+        //willChangeFieldNames.AddRange(fieldNames);
         UpdateVersion();
     }
 

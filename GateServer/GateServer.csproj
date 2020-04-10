@@ -89,6 +89,9 @@
     <Compile Include="..\CommonCode\ConfigModel\AutoConfigDataLoader.cs">
       <Link>DataModel\Config\AutoConfigDataLoader.cs</Link>
     </Compile>
+    <Compile Include="..\CommonCode\ConfigModel\HeroInfo.cs">
+      <Link>DataModel\Config\HeroInfo.cs</Link>
+    </Compile>
     <Compile Include="..\CommonCode\ConfigModel\ResourcePath.cs">
       <Link>DataModel\Config\ResourcePath.cs</Link>
     </Compile>

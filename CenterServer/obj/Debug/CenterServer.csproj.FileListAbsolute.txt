@@ -39,8 +39,8 @@ E:\Kal.GameFrame\JekoAllServer\CenterServer\obj\Debug\CenterServer.csproj.CoreCo
 E:\Kal.GameFrame\JekoAllServer\CenterServer\obj\Debug\CenterServer.csproj.CopyComplete
 E:\Kal.GameFrame\JekoAllServer\CenterServer\obj\Debug\CenterServer.exe
 E:\Kal.GameFrame\JekoAllServer\CenterServer\obj\Debug\CenterServer.pdb
-E:\KalGame\JekoAllServer\Bin\Debug\CenterServer.exe.config
 E:\KalGame\JekoAllServer\Bin\Debug\CenterServer.exe
+E:\KalGame\JekoAllServer\Bin\Debug\CenterServer.exe.config
 E:\KalGame\JekoAllServer\Bin\Debug\CenterServer.pdb
 E:\KalGame\JekoAllServer\CenterServer\obj\Debug\CenterServer.exe.config
 E:\KalGame\JekoAllServer\CenterServer\obj\Debug\CenterServer.csproj.CoreCompileInputs.cache

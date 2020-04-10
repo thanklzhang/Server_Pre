@@ -7,7 +7,7 @@ namespace Config
 {
     public class ConfigData
     {
-        public int SN;
+        public int id;
     }
 
 
@@ -46,11 +46,11 @@ namespace Config
 
         }
 
-        public T GetBySN<T>(int SN) where T : ConfigData
+        public T GetById<T>(int id) where T : ConfigData
         {
-            var data = (configDic[typeof(T).Name]).Cast<T>().Where(t => t.SN == SN);
+            var data = (configDic[typeof(T).Name]).Cast<T>().Where(t => t.id == id);
             if (null == data || 0 == data.Count())
-                throw new Exception("cant find the SN : " + SN + " the type : " + data.GetType().ToString());
+                throw new Exception("cant find the id : " + id + " the type : " + data.GetType().ToString());
 
             return (T)(data.First());
         }

@@ -12,7 +12,7 @@ public class GS2MSession : NetSession
     {
         SetHandlerAction(Dispatch);
     }
-
+    //这层主要是讲消息解析过滤
     public void Dispatch(int transId, byte[] body)
     {
         if (transId > (int)GS2CS.MsgId.Begin && transId < (int)GS2CS.MsgId.End)

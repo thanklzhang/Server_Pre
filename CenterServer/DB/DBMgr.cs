@@ -12,20 +12,21 @@ public class DBMgr
 {
     static SqlConnectPool connectPool;
 
-    public static List<DBEntityMgr<DBEntity>> dataMgrs;
+   //public static List<DBEntityMgr<DBEntity>> dataMgrs;
 
     public static UserDataMgr<UserData> userDataMgr;
+    public static HeroDataMgr<HeroData> heroDataMgr;
 
     public static void Init()
     {
         connectPool = new SqlConnectPool();
         connectPool.AddConnect(new MysqlConnect());
 
-        dataMgrs = new List<DBEntityMgr<DBEntity>>();
+        //dataMgrs = new List<DBEntityMgr<DBEntity>>();
 
-        //userData
+        
         userDataMgr = CreateDataMgr<UserData, UserDataMgr<UserData>>();
-
+        heroDataMgr = CreateDataMgr<HeroData, HeroDataMgr<HeroData>>();
         //userDataMgr = CreateDataMgr<UserData, UserDataMgr<UserData>>();
 
         Thread t = new Thread(() =>
@@ -34,7 +35,7 @@ public class DBMgr
             hb.Start(() =>
             {
                 SaveAll();
-            }, 15);
+            }, 18);
         });
         t.Start();
     }
@@ -42,6 +43,7 @@ public class DBMgr
     public static void SaveAll()
     {
         userDataMgr.SaveAll();
+        heroDataMgr.SaveAll();
     }
 
     public static K CreateDataMgr<T, K>() where T : DBEntity, new() where K : DBEntityMgr<T>, new()

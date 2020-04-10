@@ -5,11 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using DataModel;
 using Google.Protobuf;
+using Logic;
+//处理消息 ， 在 CS 中 将各种业务层的再次提取分开
 public class GSMsgHandler //: MsgHandler
 {
     string currAccount;
     //int currSessionId;//GS 中的 客户端的 sessionId 
-    //Player currPlayer;
+    User currUser;
 
     public void HandleMsg(int gcNetId, int msgId, byte[] data)
     {
@@ -22,7 +24,8 @@ public class GSMsgHandler //: MsgHandler
                 case GS2CS.MsgId.Gs2CsUserExit:
                     GS2CS.reqUserExit exit = GS2CS.reqUserExit.Parser.ParseFrom(data);
                     Console.WriteLine("user : " + exit.Account + " exit from center ...");
-                    CSServer.Instance.UserExit(exit.Account);
+                    UserMgr.Instance.UserExit(exit.Account);
+                    //CSServer.Instance.UserExit(exit.Account);
                     break;
 
             }
@@ -43,16 +46,17 @@ public class GSMsgHandler //: MsgHandler
                     string password = askLogin.Password;
 
                     bool isLoginSuccess = false;
-                    UserData user = DBMgr.userDataMgr.Find(null, "account = '" + account + "'");//, password
+                    UserData userData = DBMgr.userDataMgr.Find(null, "account = '" + account + "'");//, password
 
 
 
                     //List<int> lo = null;
                     //lo.Add(1);
-                    if (user != null)
+                    bool isNewUser = false;
+                    if (userData != null)
                     {
                         //Console.WriteLine("have uer , server login info : " + user + " " + user.account + " " + user.password);
-                        if (password == user.password)
+                        if (password == userData.password)
                         {
                             isLoginSuccess = true;
                         }
@@ -60,6 +64,7 @@ public class GSMsgHandler //: MsgHandler
                     }
                     else
                     {
+                        isNewUser = true;
                         //Console.WriteLine("server login info : " + " fail");
 
                         //目前没有的用户先给创建一个
@@ -69,11 +74,13 @@ public class GSMsgHandler //: MsgHandler
                         Random r = new Random();
                         string tokenStr = account + TimeTool.GetTimeStamp() + r.Next(100000);
                         string token = EncryptionTool.GetMd5Str(tokenStr);
-                        user = UserDataMgr<UserData>.CreateUser(account, password, token);
+                        userData = UserDataMgr<UserData>.CreateUserData(account, password, token);
 
-                        DBMgr.userDataMgr.Save(user, true);
-                        var userTemp = DBMgr.userDataMgr.Find(new string[] { "id" }, "account = '" + account + "'");//, password
-                        user.id = userTemp.id;
+                        DBMgr.userDataMgr.Save(userData, true);
+
+                        //改为在内存中赋 id
+                        //var userTemp = DBMgr.userDataMgr.Find(new string[] { "id" }, "account = '" + account + "'");//, password
+                        //userData.id = userTemp.id;
 
                         //DBMgr.redisOrg.HashSet("accountId", account, id);
                         isLoginSuccess = true;
@@ -81,16 +88,6 @@ public class GSMsgHandler //: MsgHandler
 
                     }
 
-                    //test
-                    //user = new User()
-                    //{
-                    //    id = 1,
-                    //    account = "test0",
-                    //    password = "123",
-                    //    token = "123456"
-                    //};//, password
-
-                    //isLoginSuccess = true;
 
                     GC2LS.respAskLogin loginResult = new GC2LS.respAskLogin();
                     loginResult.IsSuccess = isLoginSuccess;
@@ -99,42 +96,46 @@ public class GSMsgHandler //: MsgHandler
                     {
                         loginResult.GateServerIp = ConstInfo.GS_IP;
                         loginResult.GateServerPort = ConstInfo.GS_Client_Port;
-                        loginResult.UserId = "" + user.id;
-                        loginResult.UserAccount = user.account;
+                        loginResult.UserId = "" + userData.id;
+                        loginResult.UserAccount = userData.account;
 
                         //this.currAccount = user.account;
 
                         //this.currSessionId = user.sessionId;
 
-                        //计算 token
-                        //Random r = new Random();//之后是一个
-                        //string tokenStr = user.id + user.account + TimeTool.GetTimeStamp() + r.Next(100000);
-                        //string token = EncryptionTool.GetMd5Str(tokenStr);
-                        //loginResult.Token = "" + user.token;
-                        //user.token = token;
-
-
-
                         // Console.WriteLine("token : " + user.token);
-                        Console.WriteLine("user online : " + user.account);
+                        Console.WriteLine("user online : " + userData.account);
 
                         //用户成功登录
-                        OnlineUser onlineUser = OnlineUser.Create(user.id, user.account, user.password, user.token);
-                        CSServer.Instance.UserOnline(onlineUser);
-                        //CSServer.Instance.playerMgr.Create(user);
-                        //Console.WriteLine("when verify netId : " + gcNetId);
-                        //user.SetSessionId(gcNetId);//这个是 登录中 的sessionId 所以不能用 currSessionId
+                        User onlineUser = User.Create(userData.id, userData.account, userData.password, userData.token);
 
-                        //currPlayer = CSServer.Instance.GetPlayer(account);
-                        //user.playerId = currPlayer.id;
+                        //加载用户数据
+                        if (!onlineUser.isLoadedData)
+                        {
+                            HeroMgr.Instance.LoadHeroData(onlineUser);
+                            // CSServer.Instance.heroMgr.LoadHeroData(onlineUser);
 
-                        //同步到数据库
-                        //DBMgr.redis.Set("user:" + user.id, user);
+                            onlineUser.isLoadedData = true;
+                        }
+                        UserMgr.Instance.UserOnline(onlineUser);
+                        //CSServer.Instance.UserOnline(onlineUser);
+
+                        //到这里 用户已经可以进入游戏了
+
+                        currUser = UserMgr.Instance.GetUser(account);
+
+                        if (isNewUser)
+                        {
+                            //test 上场免费 2 个英雄
+                            var heroData0 = HeroDataMgr<HeroData>.CreateHeroData(currUser.id, 100);
+                            var heroData1 = HeroDataMgr<HeroData>.CreateHeroData(currUser.id, 101);
+                            Hero hero0 = HeroMgr.CreateHero(heroData0.configId, heroData0);
+                            Hero hero1 = HeroMgr.CreateHero(heroData1.configId, heroData1);
+                            DBMgr.SaveAll();
+                            HeroMgr.Instance.LoadHeroData(currUser);
+                        }
 
 
-
-
-                        //user.Save();
 
 
                     }
@@ -163,86 +164,122 @@ public class GSMsgHandler //: MsgHandler
         //客户端的请求
         if (msgId > (int)GC2CS.MsgId.Begin && msgId < (int)GC2CS.MsgId.End)
         {
-            switch ((GC2CS.MsgId)msgId)
-            {
-                case GC2CS.MsgId.Gc2CsEnterGameService:
 
-                    HandleEnterGame(gcNetId, data);
-                    break;
-                case GC2CS.MsgId.Gc2CsHeroList:
 
-                    HandleHeroList(gcNetId, data);
-                    break;
-                    //case GC2CS.MsgId.Gc2CsAskStartNormalManagement:
+            var logicHandler = HandlerLogicMgr.Instance.Get(msgId);
+            logicHandler.Handler(currUser, gcNetId, data);
+            //switch ((GC2CS.MsgId)msgId)
+            //{
+            //    case GC2CS.MsgId.Gc2CsEnterGameService:
 
-                    //    break;
-                    //case GC2CS.MsgId.Gc2CsAskStartOvertimeManagement:
-                    //    StartOvertimelManagement(gcNetId, data);
-                    //    break;
-                    //case GC2CS.MsgId.Gc2CsStartMateCombat:
-                    //    StartMateCombat(gcNetId, data);
-                    //    break;
+            //        HandleEnterGame(gcNetId, data);
+            //        break;
+            //    case GC2CS.MsgId.Gc2CsHeroList:
 
-            }
+            //        HandleHeroList(gcNetId, data);
+            //        break;
+            //    case GC2CS.MsgId.Gc2CsAddHeroLevel:
+
+            //        HandleAddHeroLevel(gcNetId, data);
+            //        break;
+            //        //case GC2CS.MsgId.Gc2CsAskStartNormalManagement:
+
+            //        //    break;
+            //        //case GC2CS.MsgId.Gc2CsAskStartOvertimeManagement:
+            //        //    StartOvertimelManagement(gcNetId, data);
+            //        //    break;
+            //        //case GC2CS.MsgId.Gc2CsStartMateCombat:
+            //        //    StartMateCombat(gcNetId, data);
+            //        //    break;
+
+            //}
         }
 
     }
 
+    //这些之后会变成单独的业务层处理
+
+    //public void HandleEnterGame(int gcNetId, byte[] data)
+    //{
+    //    GC2CS.reqEnterGameService enterGame = GC2CS.reqEnterGameService.Parser.ParseFrom(data);
+    //    string account = enterGame.Account;
+
+    //    GC2CS.respEnterGameService enterResult = new GC2CS.respEnterGameService();
+    //    enterResult.IsSuccess = true;
+    //    enterResult.Err = ResultCode.Success;
+    //    //this.currSessionId = gcNetId;
+
+    //    //用户可以进行游戏了 这时候需要把 sessionId 赋值
+    //    UserMgr.Instance.GetUser(account).SetSessionId(gcNetId);
+    //    //CSServer.Instance.GetUser(account).SetSessionId(gcNetId);
 
 
-    public void HandleEnterGame(int gcNetId, byte[] data)
-    {
-        GC2CS.reqEnterGameService enterGame = GC2CS.reqEnterGameService.Parser.ParseFrom(data);
-        string account = enterGame.Account;
-
-        GC2CS.respEnterGameService enterResult = new GC2CS.respEnterGameService();
-        enterResult.IsSuccess = true;
-        enterResult.Err = ResultCode.Success;
-        //this.currSessionId = gcNetId;
-        //enterResult.UserInfo = new GS2GC.UserInfo()
-        //{
-        //    Account = "thanklzhang",
-        //    NickName = "kaller",
-        //    PortraitURL = "",
-        //    //以下是 player 属性
-        //    Level = 3,
-        //    Coin = 450000
-        //};
-        //enterResult.ManagementInfo = new GS2GC.ManagementInfo()
-        //{
-        //    State = 0,
-        //    LastStartTime = 0,
-        //    LastFinishTime = 0,
-        //    TotalUseBenchNum = 4//这里先固定值  之后会根据事实来更改
-        //};
-
-        //用户可以进行游戏了 这时候需要把 sessionId 赋值
-        CSServer.Instance.GetUser(account).SetSessionId(gcNetId);
+    //    Console.WriteLine("trans to GS : " + GC2CS.MsgId.Gc2CsEnterGameService.ToString());
+    //    SendToClient(gcNetId, (int)GC2CS.MsgId.Gc2CsEnterGameService, enterResult.ToByteArray());
 
 
-        Console.WriteLine("trans to GS : " + GC2CS.MsgId.Gc2CsEnterGameService.ToString());
-        SendToClient(gcNetId, (int)GC2CS.MsgId.Gc2CsEnterGameService, enterResult.ToByteArray());
-
-        //Sync info
-        //currPlayer.SyncPlayerBaseInfo();
-        //currPlayer.SyncHeroListInfo();
-        //currPlayer.SyncItemListInfo();
-        //currPlayer.SyncDrawingListInfo();
-        //currPlayer.SyncManagementInfo();
-
-    }
-
-    private void HandleHeroList(int gcNetId, byte[] data)
-    {
-        GC2CS.reqHeroList req = GC2CS.reqHeroList.Parser.ParseFrom(data);
 
 
-        GC2CS.respHeroList resp = new GC2CS.respHeroList();
-        resp.HeroList.Add(new GC2CS.HeroInfo() { Id = 1, Level = 2 });
-        resp.HeroList.Add(new GC2CS.HeroInfo() { Id = 2, Level = 5 });
+    //    //推送一些需要的数据
+    //    SyncHeroList(gcNetId);
 
-        SendToClient(gcNetId, (int)GC2CS.MsgId.Gc2CsHeroList, resp.ToByteArray());
-    }
+    //    //Sync info
+    //    //currPlayer.SyncPlayerBaseInfo();
+    //    //currPlayer.SyncHeroListInfo();
+    //    //currPlayer.SyncItemListInfo();
+    //    //currPlayer.SyncDrawingListInfo();
+    //    //currPlayer.SyncManagementInfo();
+
+    //}
+
+    //private void HandleHeroList(int gcNetId, byte[] data)
+    //{
+    //    GC2CS.reqHeroList req = GC2CS.reqHeroList.Parser.ParseFrom(data);
+
+    //    SyncHeroList(gcNetId);
+    //}
+
+    //void SyncHeroList(int gcNetId)
+    //{
+    //    GC2CS.respHeroList resp = new GC2CS.respHeroList();
+    //    var heroList = currUser.GetOwnHeroes();
+    //    for (int i = 0; i < heroList.Count; ++i)
+    //    {
+    //        var ownHero = heroList[i];
+    //        var heroInfo = new GC2CS.HeroInfo()
+    //        {
+    //            Id = ownHero.data.id,
+    //            Level = ownHero.data.level,
+    //            ConfigId = ownHero.config.id
+
+    //        };
+    //        resp.HeroList.Add(heroInfo);
+    //    }
+    //    SendToClient(gcNetId, (int)GC2CS.MsgId.Gc2CsHeroList, resp.ToByteArray());
+    //}
+
+    //void HandleAddHeroLevel(int gcNetId, byte[] data)
+    //{
+    //    GC2CS.reqAddHeroLevel req = GC2CS.reqAddHeroLevel.Parser.ParseFrom(data);
+    //    GC2CS.respAddHeroLevel resp = new GC2CS.respAddHeroLevel();
+    //    var hero = currUser.GetOwnHero(req.HeroId);
+    //    if (hero != null)
+    //    {
+    //        hero.AddLevel(1);
+
+    //        //如果过多 那么包会过大 那么需要分包 HERO_MAX_SIZE_IN_MSG
+    //        HeroMgr.Instance.NotifyUpdateHeroes(currUser, new List<Hero>() { hero });
+
+    //        resp.Err = ResultCode.Success;
+    //        SendToClient(gcNetId, (int)GC2CS.MsgId.Gc2CsAddHeroLevel, resp.ToByteArray());
+    //    }
+    //    else
+    //    {
+    //        resp.Err = ResultCode.ErrUnknown;
+    //        SendToClient(gcNetId, (int)GC2CS.MsgId.Gc2CsAddHeroLevel, resp.ToByteArray());
+    //    }
+    //}
+
 
     void SendToClient(int sessionId, int msgId, byte[] data)
     {
@@ -251,106 +288,5 @@ public class GSMsgHandler //: MsgHandler
     }
 
 
-    //public void GetPlayerInfo(int gcNetId, byte[] data)
-    //{
-
-    //}
-
-    //public void GetManagementInfo(int gcNetId, byte[] data)
-    //{
-
-    //}
-
-    //public void GetCanUseDrawings(int gcNetId, byte[] data)
-    //{
-
-    //}
-
-    //public void StartNormalManagement(int gcNetId, byte[] data)
-    //{
-    //    var startManagement = GC2CS.AskStartNormalManagement.Parser.ParseFrom(data);
-    //    var clientBenches = startManagement.WorkBenchList;
-    //    List<SelectWorkBench> selectBenches = ConvertToSelectWorkBench(clientBenches.ToList());
-    //    currPlayer.StartManagement(0, selectBenches);
-
-    //}
-
-    //public void StartOvertimelManagement(int gcNetId, byte[] data)
-    //{
-    //    Console.WriteLine("StartOvertimelManagement");
-    //    var startManagement = GC2CS.AskStartNormalManagement.Parser.ParseFrom(data);
-
-    //    //Test
-    //    //List<SelectWorkBench> selectBenches = new List<SelectWorkBench>();
-    //    //selectBenches.Add(SelectWorkBench.Create(0, 10000, new List<int>() { 400002, 400003 }));
-    //    //selectBenches.Add(SelectWorkBench.Create(1, 10001, new List<int>() { 400001, 400004, 400005 }));
-    //    //selectBenches.Add(SelectWorkBench.Create(2, 10002, new List<int>() { 400007 }));
-
-    //    var clientBenches = startManagement.WorkBenchList;
-    //    List<SelectWorkBench> selectBenches = ConvertToSelectWorkBench(clientBenches.ToList());
-
-
-    //    currPlayer.StartManagement(1, selectBenches);
-    //}
-
-    //List<SelectWorkBench> ConvertToSelectWorkBench(List<GC2CS.WorkBench> clientBenches)
-    //{
-    //    //var clientBenches = startManagement.WorkBenchList;
-    //    List<SelectWorkBench> selectBenches = new List<SelectWorkBench>();
-    //    clientBenches.ToList().ForEach(cBench =>
-    //    {
-    //        List<SelectWorkProject> selectProjects = new List<SelectWorkProject>();
-    //        cBench.WorkProjectList.ToList().ForEach(cProject =>
-    //        {
-    //            SelectDrawing selectDrawing = new SelectDrawing()
-    //            {
-    //                drawingSN = cProject.Drawing.DrawingSN
-    //            };
-    //            var selectProject = new SelectWorkProject()
-    //            {
-    //                drawing = selectDrawing
-    //            };
-
-    //            selectProjects.Add(selectProject);
-    //        });
-    //        SelectWorkBench selectWorkBench = new SelectWorkBench()
-    //        {
-    //            index = cBench.Index,
-    //            workerId = cBench.WorkerId,
-    //            workProjects = selectProjects
-    //        };
-    //        selectBenches.Add(selectWorkBench);
-    //    });
-
-    //    return selectBenches;
-    //}
-
-    //public void ReceiveManagementResult(int gcNetId, byte[] data)
-    //{
-    //    currPlayer.ReceiveManagementResult();
-    //}
-
-    //public void StartMateCombat(int gcNetId, byte[] data)
-    //{
-    //    Console.WriteLine("receive start mate request");
-    //    GC2CS.AskStartMateCombat askMate = GC2CS.AskStartMateCombat.Parser.ParseFrom(data);
-    //    if (currPlayer != null)
-    //    {
-    //        //这里 player 中的 ip 和 port 只是为了传递
-    //        currPlayer.ip = askMate.Ip;
-    //        currPlayer.udpPort = askMate.UdpPort;
-
-    //        CSServer.Instance.PlayerStartMate(currPlayer);
-    //    }
-
-    //}
-
-    //public void CreateCombatFinish(int gcNetId, byte[] data)
-    //{
-    //    Console.WriteLine("receive create combat finish");
-    //    SS2CS.CreateCombatFinish createCombatFinish = SS2CS.CreateCombatFinish.Parser.ParseFrom(data);
-
-    //    CSServer.Instance.CreateCombatFinish(createCombatFinish);
-    //}
 }
 
